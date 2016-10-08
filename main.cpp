@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <cstdlib>
+#include <algorithm>
 
 using namespace std;
 
@@ -11,13 +13,21 @@ using namespace std;
 //tablo doldurulurken yollar matrisine olası yollar eklenecek
 //sağ en alttan başlanıp olası yollara göre high road low road ve
 
+int StringToInt( const std::string& st)
+{
+    int retVal;
+    for_each(st.begin(), st.end(), [&retVal] (const char& ch){ retVal = (retVal * 10) + (int)(ch-'0'); });
+    return retVal;
+}
+
 int main() {
   ifstream oku;
   oku.open("input.txt");
-  string satir,match,mismatch,gap,road,dna1,dna2;
+  string satir,dna1,dna2;
+  int match,mismatch,gap,road;
   int sayac=0;
-  vector<vector<char> > matrix;
-  vector<vector<char> > yonler;
+  vector<vector<int>> matrix;
+  vector<vector<int>> yonler;
 
   if (oku.is_open())
     {
@@ -26,8 +36,8 @@ int main() {
         istringstream ss(satir);
 
         if(sayac==0){
-            ss >> match >> mismatch >> gap >> road;
-            cout << match << " " << mismatch << " " << gap << " " << road <<endl;
+          ss >> match >> mismatch >> gap >> road;
+          cout << match << " " << mismatch << " " << gap << " " << road <<endl;
 
         }else if(sayac==1){
           ss >> dna1;
@@ -56,20 +66,24 @@ int main() {
     for (int i = 0; i < dna2.size()+2; ++i)
       yonler[i].resize(dna1.size()+1);
 
-  for(int i=2;i<dna1.size()+2;i++){
+  matrix[1][1]=0;
+  for(int i=2;i<dna1.size()+2;i++){//satır - genişlik
       matrix[0][i]=dna1[i-2];
+      matrix[1][i]=matrix[1][i-1]+gap;
   }
-
-  for(int k=2;k<dna2.size()+2;k++){
+  for(int k=2;k<dna2.size()+2;k++){//sütun yükseklik
       matrix[k][0]=dna2[k-2];
+      matrix[k][1]=matrix[k-1][1]+gap;
   }
 
-  for(int i = 0; i < dna2.size()+2; i++){
+  for(int i = 0; i < dna2.size()+2; i++){//matrisi çizdiriyor
         for(int j = 0; j < dna1.size()+2; j++){
-           //matrix[i][j]  = (iFile >> value,value);
-           cout << matrix[i][j] << " ";
+          //if(i==0 && j>=2)
+          //  cout << matrix[i][j] << " ";
+          //else
+            cout << matrix[i][j] << " ";
         }
-        cout << "\n";
+        cout << endl;
     }
 
   return 0;
