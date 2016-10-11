@@ -79,8 +79,8 @@ int main() {
   }
 //diagonal gel satir ve sütundan 1 er eksik.üstten columdan 1 eksik.yandan rowdan 1 eksik.
   int tmpdiag,tmpup,tmpright;
-  for(int r=2;r<dna2.size();r++){//row ,2
-    for(int c=2;c<dna1.size();c++){//column
+  for(int r=2;r<dna2.size()+2;r++){//row ,2
+    for(int c=2;c<dna1.size()+2;c++){//column
       if(matrix[0][c]==matrix[r][0])
         tmpdiag=match+matrix[r-1][c-1];
 
