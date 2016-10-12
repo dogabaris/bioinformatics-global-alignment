@@ -14,12 +14,11 @@ using namespace std;
 //sağ en alttan başlanıp olası yollara göre high road low road ve
 //diagonal giderken(çapraz) match-mismatch eklenir, sağdan ya da soldan giderken gap penalty eklenir. En büyük değer yazılır.
 
-int StringToInt( const std::string& st)
-{
-    int retVal;
-    for_each(st.begin(), st.end(), [&retVal] (const char& ch){ retVal = (retVal * 10) + (int)(ch-'0'); });
-    return retVal;
-}
+struct yon {
+    char yondiag='\0';
+    char yonright='\0';
+    char yonup='\0';
+};
 
 int main() {
   ifstream oku;
@@ -28,7 +27,8 @@ int main() {
   int match,mismatch,gap,road;
   int sayac=0;
   vector<vector<int>> matrix;
-  vector<vector<int>> yonler;
+  //vector<vector<yon>> yonler;
+
 
   if (oku.is_open())
     {
@@ -59,13 +59,16 @@ int main() {
   }
   oku.close();
 
+
+
   matrix.resize(dna2.size()+2);//yukseklik dna2 genişlik dna1
     for (int i = 0; i < dna2.size()+2; ++i)
       matrix[i].resize(dna1.size()+1);
 
-  yonler.resize(dna2.size()+2);//yukseklik dna2 genişlik dna1
+  yon yonler[dna2.size()+2][dna1.size()+2];
+  /*yonler.resize(dna2.size()+2);//yukseklik dna2 genişlik dna1
     for (int i = 0; i < dna2.size()+2; ++i)
-      yonler[i].resize(dna1.size()+1);
+      yonler[i].resize(dna1.size()+1);*/
 
   matrix[1][1]=0;
 
@@ -91,11 +94,25 @@ int main() {
         tmpright=gap+matrix[r][c-1];
 
         int biggest = tmpdiag;
+        //yonler.push_back(yonler());
 
-        if (tmpdiag <= tmpup)
-              biggest = tmpup;
-        if (biggest <= tmpright)
-              biggest = tmpright;
+        //yonler[r][c]='\\';
+
+        if (tmpdiag <= tmpup){
+          biggest = tmpup;
+          //yonler.push_back(yonler());
+          yonler[r][c].yonup='|';
+          //yonler[r][c]='|';
+        }
+        if (biggest <= tmpright){
+          biggest = tmpright;
+          //yonler.push_back(yonler());
+          yonler[r][c].yonright='-';
+          //yonler[r][c]='-';
+        }else{
+          yonler[r][c].yondiag='\\';
+        }
+
 
         matrix[r][c]=biggest;
     }
@@ -107,6 +124,18 @@ int main() {
           //  cout << matrix[i][j] << " ";
           //else
             cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+  }
+  int rowcount = (sizeof(yonler) / sizeof(*yonler));
+  int columncount = (sizeof(*yonler) / sizeof(**yonler));
+
+  for(int i = 0; i < rowcount; i++){//matrisi çizdiriyor
+        for(int j = 0; j < columncount; j++){
+          //if(i==1 && j=1)
+          //  cout << matrix[i][j] << " ";
+          //else
+            cout << "(" << yonler[i][j].yonright << yonler[i][j].yondiag << yonler[i][j].yonup  << ")"<< " ";
         }
         cout << endl;
   }
