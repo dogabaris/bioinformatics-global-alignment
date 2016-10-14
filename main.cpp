@@ -81,6 +81,7 @@ int main() {
   }
 //diagonal gel satir ve sütundan 1 er eksik.üstten columdan 1 eksik.yandan rowdan 1 eksik.
   int tmpdiag,tmpup,tmpright;
+
   for(int r=2;r<dna2.size()+2;r++){//row ,2
     for(int c=2;c<dna1.size()+2;c++){//column
       if(matrix[0][c]==matrix[r][0])
@@ -118,34 +119,37 @@ int main() {
         matrix[r][c]=biggest;
     }
   }
-
+  ofstream output;
+  output.open(("output.txt"));
+  output << "Matris:"<< endl;
   for(int i = 0; i < dna2.size()+2; i++){//matrisi çizdiriyor
         for(int j = 0; j < dna1.size()+2; j++){
 
-            cout << matrix[i][j] << " ";
+            output << matrix[i][j] << " ";
         }
-        cout << endl;
+        output << endl;
   }
   int rowcount = (sizeof(yonler) / sizeof(*yonler));
   int columncount = (sizeof(*yonler) / sizeof(**yonler));
 
+  output << "Yönler:"<< endl;
   for(int i = 0; i < rowcount; i++){//yonleri çizdiriyor
         for(int j = 0; j < columncount; j++){
 
-            cout << "(" << yonler[i][j].direction  << ")"<< " ";
-            //cout << "(" << yonler[i][j].yonright << yonler[i][j].yondiag << yonler[i][j].yonup  << ")"<< " ";
+            output << "(" << yonler[i][j].direction  << ")"<< " ";
+
         }
-        cout << endl;
+        output << endl;
   }
 
   bool flagDiag=false,flagUp=false,flagRight=false;
   int intDiag=0,intUp=0,intRight=0,largest,siradakiRow=dna2.size(),siradakiColumn=dna1.size(),score=matrix[dna2.size()][dna1.size()];
   string alignmentDna1,alignmentDna2;
-  ofstream output;
+
 
   //alignmentDna1=matrix[0][columncount];
   //alignmentDna2=matrix[rowcount][0];
-  output.open(("output.txt"));
+
   while(1){
           if(road==1){
             if(yonler[siradakiRow][siradakiColumn].yondiag == '\\'){
@@ -195,7 +199,7 @@ int main() {
             }
 
 
-            cout << siradakiColumn << " " <<siradakiRow << " " << alignmentDna1 << " " << alignmentDna2 << " " << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
+            //output << siradakiColumn << " " <<siradakiRow << " " << alignmentDna1 << " " << alignmentDna2 << " " << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
             flagDiag=false;
             flagRight=false;
             flagUp=false;
@@ -254,7 +258,7 @@ int main() {
 
               }
 
-            cout << siradakiColumn << " " <<siradakiRow << " " << alignmentDna1 << " " << alignmentDna2 << " " << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
+            //output << siradakiColumn << " " <<siradakiRow << " " << alignmentDna1 << " " << alignmentDna2 << " " << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
             flagDiag=false;
             flagRight=false;
             flagUp=false;
@@ -270,9 +274,9 @@ int main() {
         }
         reverse(alignmentDna1.begin(), alignmentDna1.end());
         reverse(alignmentDna2.begin(), alignmentDna2.end());
-        cout<< alignmentDna1 << " " << alignmentDna2;
+        cout << alignmentDna1 << " " << alignmentDna2;
 
-        output<<alignmentDna1<<"\n"<<alignmentDna2<<endl;
+        output<< "dna1: "<<alignmentDna1<<"\ndna2: "<<alignmentDna2<<endl;
         output.close();
   return 0;
 }
