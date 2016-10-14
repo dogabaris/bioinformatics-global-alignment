@@ -5,7 +5,8 @@
 #include <vector>
 #include <cstdlib>
 #include <algorithm>
-
+#include <cmath>
+#include <limits>
 using namespace std;
 
 //yollar matrisi
@@ -18,6 +19,7 @@ struct yon {
     char yondiag='\0';
     char yonright='\0';
     char yonup='\0';
+    string direction;
 };
 
 int main() {
@@ -66,9 +68,6 @@ int main() {
       matrix[i].resize(dna1.size()+1);
 
   yon yonler[dna2.size()+2][dna1.size()+2];
-  /*yonler.resize(dna2.size()+2);//yukseklik dna2 genişlik dna1
-    for (int i = 0; i < dna2.size()+2; ++i)
-      yonler[i].resize(dna1.size()+1);*/
 
   matrix[1][1]=0;
 
@@ -100,16 +99,18 @@ int main() {
 
         if (tmpdiag <= tmpup){
           biggest = tmpup;
-          //yonler.push_back(yonler());
+
+          yonler[r][c].direction+='|';
           yonler[r][c].yonup='|';
-          //yonler[r][c]='|';
+
         }
         if (biggest <= tmpright){
           biggest = tmpright;
-          //yonler.push_back(yonler());
+          yonler[r][c].direction+='-';
           yonler[r][c].yonright='-';
-          //yonler[r][c]='-';
+
         }else{
+          yonler[r][c].direction+='\\';
           yonler[r][c].yondiag='\\';
         }
 
@@ -120,9 +121,7 @@ int main() {
 
   for(int i = 0; i < dna2.size()+2; i++){//matrisi çizdiriyor
         for(int j = 0; j < dna1.size()+2; j++){
-          //if(i==1 && j=1)
-          //  cout << matrix[i][j] << " ";
-          //else
+
             cout << matrix[i][j] << " ";
         }
         cout << endl;
@@ -130,19 +129,79 @@ int main() {
   int rowcount = (sizeof(yonler) / sizeof(*yonler));
   int columncount = (sizeof(*yonler) / sizeof(**yonler));
 
-  for(int i = 0; i < rowcount; i++){//matrisi çizdiriyor
+  for(int i = 0; i < rowcount; i++){//yonleri çizdiriyor
         for(int j = 0; j < columncount; j++){
-          //if(i==1 && j=1)
-          //  cout << matrix[i][j] << " ";
-          //else
-            cout << "(" << yonler[i][j].yonright << yonler[i][j].yondiag << yonler[i][j].yonup  << ")"<< " ";
+
+            cout << "(" << yonler[i][j].direction  << ")"<< " ";
+            //cout << "(" << yonler[i][j].yonright << yonler[i][j].yondiag << yonler[i][j].yonup  << ")"<< " ";
         }
         cout << endl;
   }
 
+  bool flagDiag=false,flagUp=false,flagRight=false;
+  int intDiag,intUp,intRight,largest,siradakiRow=dna2.size(),siradakiColumn=dna1.size(),score=matrix[dna2.size()][dna1.size()];
+  string alignmentDna1,alignmentDna2;
+
+  while(1){
+          if(road==1){
+            if(yonler[siradakiRow][siradakiColumn].yondiag == '\\'){
+              flagDiag=true;
+              intDiag=matrix[siradakiRow-1][siradakiColumn-1];
+            }
+            if(yonler[siradakiRow][siradakiColumn].yonup=='|'){
+              flagUp=true;
+              intUp=matrix[siradakiRow-1][siradakiColumn];
+            }
+            if(yonler[siradakiRow][siradakiColumn].yonright=='-'){
+              flagRight=true;
+              intRight=matrix[siradakiRow][siradakiColumn-1];
+            }
+
+            //hangi yola gideceği karar verilecek high road veya low roada göre sonra siradakirow ve column ona göre değişecek.
+
+            if(intDiag>=intUp && intDiag>=intRight) {//yollardaki en büyük değer bulunuyor
+                largest= intDiag;
+            }
+            if(intUp>=intDiag && intUp>=intRight) {
+                largest= intUp;
+            }
+            if(intRight>=intDiag && intRight>=intUp) {
+                largest= intRight;
+            }
+
+            if(flagUp==true && largest==intUp){//sıradaki row ve column belirleniyor ve yeniden yazdırılacak genler
+              siradakiRow=siradakiRow-1;
+              score=score+matrix[siradakiRow][siradakiColumn];
+
+            }else if(flagDiag==true && largest==intDiag){
+              siradakiRow=siradakiRow-1;
+              siradakiColumn=siradakiColumn-1;
+              score=score+matrix[siradakiRow][siradakiColumn];
+
+            }else if(flagRight==true && largest==intRight){
+              siradakiColumn=siradakiColumn-1;
+              score=score+matrix[siradakiRow][siradakiColumn];
+
+            }
+
+            if(siradakiColumn<=1 || siradakiRow<=1)
+              break;
+
+            cout << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
+            flagDiag=false;
+            flagRight=false;
+            flagUp=false;
+            intRight=NULL;
+            intUp=NULL;
+            intDiag=NULL;
+          }else if(road==0){
+
+          }
+
+        }
+
+  }
+
+
   return 0;
 }
-
-/*int matrixOlustur(dna1,dna2){
-
-}*/
