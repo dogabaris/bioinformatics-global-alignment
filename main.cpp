@@ -94,9 +94,6 @@ int main() {
         tmpright=gap+matrix[r][c-1];
 
         int biggest = tmpdiag;
-        //yonler.push_back(yonler());
-
-        //yonler[r][c]='\\';
 
         if (tmpdiag <= tmpup){
           biggest = tmpup;
@@ -110,7 +107,8 @@ int main() {
           yonler[r][c].direction+='-';
           yonler[r][c].yonright='-';
 
-        }else{
+        }
+        if(biggest==tmpdiag){
           yonler[r][c].direction+='\\';
           yonler[r][c].yondiag='\\';
         }
