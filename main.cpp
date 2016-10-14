@@ -141,9 +141,11 @@ int main() {
   bool flagDiag=false,flagUp=false,flagRight=false;
   int intDiag=0,intUp=0,intRight=0,largest,siradakiRow=dna2.size(),siradakiColumn=dna1.size(),score=matrix[dna2.size()][dna1.size()];
   string alignmentDna1,alignmentDna2;
+  ofstream output;
 
-  //alignmentDna1+=matrix[0][columncount];
-  //alignmentDna2+=matrix[rowcount][0];
+  //alignmentDna1=matrix[0][columncount];
+  //alignmentDna2=matrix[rowcount][0];
+  output.open(("output.txt"));
   while(1){
           if(road==1){
             if(yonler[siradakiRow][siradakiColumn].yondiag == '\\'){
@@ -206,6 +208,63 @@ int main() {
 
           }else if(road==0){
 
+            if(yonler[siradakiRow][siradakiColumn].yondiag == '\\'){
+              flagDiag=true;
+              intDiag=matrix[siradakiRow-1][siradakiColumn-1];
+            }
+            if(yonler[siradakiRow][siradakiColumn].yonup=='|'){
+              flagUp=true;
+              intUp=matrix[siradakiRow-1][siradakiColumn];
+            }
+            if(yonler[siradakiRow][siradakiColumn].yonright=='-'){
+              flagRight=true;
+              intRight=matrix[siradakiRow][siradakiColumn-1];
+            }
+
+            //hangi yola gideceği karar verilecek high road veya low roada göre sonra siradakirow ve column ona göre değişecek.
+
+            if(intDiag>=intUp && intDiag>=intRight) {//yollardaki en büyük değer bulunuyor
+                largest= intDiag;
+            }
+            if(intUp>=intDiag && intUp>=intRight) {
+                largest= intUp;
+            }
+            if(intRight>=intDiag && intRight>=intUp) {
+                largest= intRight;
+            }
+
+            if(flagRight==true && largest==intRight){//yana giderken dna1 alınır dna2 yerine - konur
+              alignmentDna1+=matrix[0][siradakiColumn];
+              alignmentDna2+='-';
+              siradakiColumn=siradakiColumn-1;
+              score=score+matrix[siradakiRow][siradakiColumn];
+            }
+            else if(flagDiag==true && largest==intDiag){//diagonal gidiyoken dna1(satır) dna2(sütun) ikisini de alırız
+              alignmentDna1+=matrix[0][siradakiColumn];
+              alignmentDna2+=matrix[siradakiRow][0];
+              siradakiRow=siradakiRow-1;
+              siradakiColumn=siradakiColumn-1;
+              score=score+matrix[siradakiRow][siradakiColumn];
+            }
+            else if(flagUp==true && largest==intUp){//yukarı giderken dna2 alınır dna1 yerine - konur
+               alignmentDna1+='-';
+               alignmentDna2+=matrix[siradakiRow][0];
+               siradakiRow=siradakiRow-1;
+               score=score+matrix[siradakiRow][siradakiColumn];
+
+              }
+
+            cout << siradakiColumn << " " <<siradakiRow << " " << alignmentDna1 << " " << alignmentDna2 << " " << score << " " << flagDiag << " " << flagUp << " " << flagRight << " " << intDiag << " " << intUp  << " " << intRight << endl;
+            flagDiag=false;
+            flagRight=false;
+            flagUp=false;
+            intRight=0;
+            intUp=0;
+            intDiag=0;
+
+            if(siradakiColumn==1 && siradakiRow==1)
+              break;
+
           }
 
         }
@@ -213,6 +272,7 @@ int main() {
         reverse(alignmentDna2.begin(), alignmentDna2.end());
         cout<< alignmentDna1 << " " << alignmentDna2;
 
-
+        output<<alignmentDna1<<"\n"<<alignmentDna2<<endl;
+        output.close();
   return 0;
 }
