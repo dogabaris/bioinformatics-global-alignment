@@ -145,8 +145,8 @@ int main() {
   string alignmentDna1,alignmentDna2;
 
 
-  //alignmentDna1=matrix[0][columncount];
-  //alignmentDna2=matrix[rowcount][0];
+  alignmentDna1+=matrix[0][columncount-1];
+  alignmentDna2+=matrix[rowcount-1][0];
 
   while(1){
           if(road==1){
@@ -275,6 +275,7 @@ int main() {
         cout << alignmentDna1 << " " << alignmentDna2;
 
         output<< "dna1: "<<alignmentDna1<<"\ndna2: "<<alignmentDna2<<endl;
+        output<< "score: "<< score <<endl;
         output.close();
   return 0;
 }
