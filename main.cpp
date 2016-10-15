@@ -16,10 +16,16 @@ using namespace std;
 //diagonal giderken(çapraz) match-mismatch eklenir, sağdan ya da soldan giderken gap penalty eklenir. En büyük değer yazılır.
 
 struct yon {
-    char yondiag='\0';
-    char yonright='\0';
-    char yonup='\0';
-    string direction;
+  char yondiag;
+  char yonright;
+  char yonup;
+  string direction;
+    yon(){
+      char yondiag='\0';
+      char yonright='\0';
+      char yonup='\0';
+      string direction;
+    }
 };
 
 int main() {
@@ -28,7 +34,7 @@ int main() {
   string satir,dna1,dna2;
   int match,mismatch,gap,road;
   int sayac=0;
-  vector<vector<int>> matrix;
+  vector<vector<int> > matrix;
   //vector<vector<yon>> yonler;
 
 
