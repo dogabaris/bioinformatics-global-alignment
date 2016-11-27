@@ -281,7 +281,7 @@ int main() {
         cout << alignmentDna1 << " " << alignmentDna2;
 
         output<< "dna1: "<<alignmentDna1<<"\ndna2: "<<alignmentDna2<<endl;
-        output<< "score: "<< score <<endl;
+        output<< "score: "<< score <<endl << "\n";
         output.close();
   return 0;
 }
